@@ -1,0 +1,110 @@
+import React, { useState } from 'react';
+import { Droppable, Draggable } from 'react-beautiful-dnd';
+import { Column, Card } from '../types';
+import KanbanCard from './KanbanCard';
+
+interface KanbanColumnProps {
+  column: Column;
+  cards: Card[];
+  onAddCard: (columnId: string, title: string) => void;
+  onUpdateCard: (card: Card) => void;
+  onDeleteCard: (cardId: string) => void;
+}
+
+const KanbanColumn: React.FC<KanbanColumnProps> = ({
+  column,
+  cards,
+  onAddCard,
+  onUpdateCard,
+  onDeleteCard
+}) => {
+  const [isAddingCard, setIsAddingCard] = useState(false);
+  const [newCardTitle, setNewCardTitle] = useState('');
+
+  const handleAddCard = () => {
+    if (newCardTitle.trim()) {
+      onAddCard(column.id, newCardTitle);
+      setNewCardTitle('');
+      setIsAddingCard(false);
+    }
+  };
+
+  return (
+    <div className="kanban-column">
+      <h3 className="font-semibold text-lg mb-3 flex justify-between items-center">
+        {column.name}
+        <span className="text-sm text-gray-500">{cards.length}</span>
+      </h3>
+      
+      <Droppable droppableId={column.id}>
+        {(provided, snapshot) => (
+          <div
+            ref={provided.innerRef}
+            {...provided.droppableProps}
+            className={`min-h-[200px] ${
+              snapshot.isDraggingOver ? 'bg-blue-50' : ''
+            }`}
+          >
+            {cards.map((card, index) => (
+              <Draggable key={card.id} draggableId={card.id} index={index}>
+                {(provided, snapshot) => (
+                  <div
+                    ref={provided.innerRef}
+                    {...provided.draggableProps}
+                    {...provided.dragHandleProps}
+                    className={`${snapshot.isDragging ? 'dragging' : ''}`}
+                  >
+                    <KanbanCard
+                      card={card}
+                      onUpdate={onUpdateCard}
+                      onDelete={onDeleteCard}
+                    />
+                  </div>
+                )}
+              </Draggable>
+            ))}
+            {provided.placeholder}
+          </div>
+        )}
+      </Droppable>
+
+      {isAddingCard ? (
+        <div className="mt-3">
+          <textarea
+            className="w-full p-2 border rounded-md mb-2"
+            placeholder="카드 제목 입력..."
+            value={newCardTitle}
+            onChange={(e) => setNewCardTitle(e.target.value)}
+            autoFocus
+          />
+          <div className="flex space-x-2">
+            <button
+              onClick={handleAddCard}
+              className="bg-primary text-white px-3 py-1 rounded-md text-sm"
+            >
+              추가
+            </button>
+            <button
+              onClick={() => {
+                setIsAddingCard(false);
+                setNewCardTitle('');
+              }}
+              className="bg-gray-200 px-3 py-1 rounded-md text-sm"
+            >
+              취소
+            </button>
+          </div>
+        </div>
+      ) : (
+        <button
+          onClick={() => setIsAddingCard(true)}
+          className="add-card-btn mt-2"
+        >
+          + 카드 추가
+        </button>
+      )}
+    </div>
+  );
+};
+
+export default KanbanColumn;

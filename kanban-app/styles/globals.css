@@ -1,0 +1,35 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --foreground-rgb: 0, 0, 0;
+  --background-start-rgb: 214, 219, 220;
+  --background-end-rgb: 255, 255, 255;
+}
+
+body {
+  color: rgb(var(--foreground-rgb));
+  background: linear-gradient(
+      to bottom,
+      transparent,
+      rgb(var(--background-end-rgb))
+    )
+    rgb(var(--background-start-rgb));
+}
+
+.kanban-column {
+  @apply bg-gray-100 rounded-md p-3 min-h-[500px] w-72;
+}
+
+.kanban-card {
+  @apply bg-white p-3 rounded-md shadow-sm mb-2 cursor-pointer hover:shadow-md transition-shadow;
+}
+
+.dragging {
+  @apply opacity-50;
+}
+
+.add-card-btn {
+  @apply w-full text-left text-gray-500 hover:text-gray-700 py-2 px-3 rounded-md hover:bg-gray-200 transition-colors;
+}
