@@ -6,12 +6,6 @@ import Layout from '../../components/Layout';
 import KanbanBoard from '../../components/KanbanBoard';
 import { Board } from '../../types';
 import { toast } from 'react-toastify';
-import dynamic from 'next/dynamic';
-
-const Toolbar = dynamic(
-  () => import('@stagewise/toolbar').then(mod => mod.Toolbar),
-  { ssr: false }
-);
 
 export default function BoardPage() {
   const user = useUser();
@@ -59,17 +53,22 @@ export default function BoardPage() {
   if (loading || !board) {
     return (
       <Layout title="보드 로딩 중 - 칸반 보드">
-        {process.env.NODE_ENV === 'development' && <Toolbar />}
+        {process.env.NODE_ENV === 'development' && 
         <div className="flex justify-center items-center h-64">
           <p className="text-gray-500">로딩 중...</p>
         </div>
+        }
       </Layout>
     );
   }
 
   return (
     <Layout title={`${board.name} - 칸반 보드`}>
-      {process.env.NODE_ENV === 'development' && <Toolbar />}
+      {process.env.NODE_ENV === 'development' && 
+      <div className="flex justify-center items-center h-64">
+        <p className="text-gray-500">로딩 중...</p>
+      </div>
+      }
       <div className="py-6">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center mb-6">

@@ -3,12 +3,9 @@ import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 import { useUser } from '@supabase/auth-helpers-react';
 import Layout from '../components/Layout';
-import dynamic from 'next/dynamic';
 
-const Toolbar = dynamic(
-  () => import('@stagewise/toolbar').then(mod => mod.Toolbar),
-  { ssr: false }
-);
+
+
 
 const Home: NextPage = () => {
   const user = useUser();
@@ -21,8 +18,8 @@ const Home: NextPage = () => {
   }, [user, router]);
 
   return (
-    <Layout title="칸반 보드 - 홈">
-      {process.env.NODE_ENV === 'development' && <Toolbar />}
+    <Layout title="칸반 보드 - 홈"> 
+      {process.env.NODE_ENV === 'development'  }
       <div className="py-12 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="lg:text-center">
